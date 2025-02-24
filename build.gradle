@@ -65,6 +65,14 @@ dependencies {
 	implementation 'net.minidev:json-smart:2.4.7'
 }
 
+task copyGitSubmodule(type: Copy) {
+	copy {
+		from './25-1-ClubFair-Server-Properties'
+		include '*.yml'
+		into './src/main/resources'
+	}
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
 }

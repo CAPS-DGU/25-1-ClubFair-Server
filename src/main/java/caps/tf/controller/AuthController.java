@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final AuthService authService;
 
-    @PostMapping("/sign-up")
+    /*@PostMapping("/sign-up")
     public ResponseEntity<?> signUp(
             @RequestBody AuthSignUpDto authSignUpDto
     ) {
         authService.signUp(authSignUpDto);
         return ResponseEntity.ok().build();
-    }
+    }*/
 }

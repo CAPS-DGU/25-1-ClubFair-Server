@@ -6,7 +6,7 @@ on:
 
 jobs:
   # ========= Build & Push Job =========
-  PR Check:
+  build-and-push:
     runs-on: ubuntu-22.04
     steps:
       # 1) 리포지토리 및 프라이빗 서브모듈 체크아웃
@@ -53,7 +53,7 @@ jobs:
           docker push 533267033034.dkr.ecr.ap-northeast-2.amazonaws.com/jobfair:latest
 
   # ========= Deploy Job =========
-  Deploy:
+  deploy:
     needs: [ build-and-push ]
     runs-on: ubuntu-22.04
     steps:

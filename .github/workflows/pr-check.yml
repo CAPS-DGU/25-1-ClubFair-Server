@@ -12,7 +12,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # 2단계: JDK 21 설치 (Gradle 빌드용)
+      # 2단계: JDK 21 설치
       - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
@@ -24,23 +24,35 @@ jobs:
         run: |
           ./gradlew build
 
-      # 4단계: Docker Build & Push (Docker Hub에 푸시 예시)
+      # 4단계: AWS 자격 증명 구성 (GitHub Secrets에 저장된 ACCESS_KEY_ID, SECRET_ACCESS_KEY 사용)
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2   # ECR 리포지토리가 위치한 리전
+
+      # 5단계: AWS ECR에 로그인 (ECR에 푸시하기 위한 사전 인증)
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      # 6단계: 도커 이미지 빌드
       - name: Build Docker image
         run: |
-          # Docker Hub 로그인 (access token 필요 시 secrets 활용)
-          # docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+          docker build -t 533267033034.dkr.ecr.ap-northeast-2.amazonaws.com/jobfair .
 
-          # 이미지를 linux/amd64로 빌드하고 local에 로드(load) 후, jeongheumchoi/clubfair-be:0.0.1 태그로 푸시
-          docker buildx build --platform linux/amd64 --load --tag jeongheumchoi/clubfair-be:0.0.1 .
-          docker push jeongheumchoi/clubfair-be:0.0.1
+      # 7단계: AWS ECR에 푸시
+      - name: Push Docker image
+        run: |
+          docker push 533267033034.dkr.ecr.ap-northeast-2.amazonaws.com/jobfair
 
-      # 5단계: EC2에 SSH 접속 → 이미지 Pull → /home/ubuntu/deploy.sh 실행
+      # 8단계: EC2에 SSH 접속하여 ECR 이미지 Pull 및 컨테이너 실행
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: 3.36.249.253            
-          username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
+          host: 3.36.249.253             # EC2 공인 IP
+          username: ubuntu               # EC2 사용자명
+          key: ${{ secrets.EC2_SSH_KEY }} # GitHub Secrets에 저장된 pem 키
           script: |
             docker pull jeongheumchoi/clubfair-be:0.0.1
             chmod +x /home/ubuntu/deploy.sh

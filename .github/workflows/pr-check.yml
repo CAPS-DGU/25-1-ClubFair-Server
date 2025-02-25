@@ -68,5 +68,5 @@ jobs:
             #    - name: jobfair (컨테이너 이름)
             docker run -d \
               --name jobfair \
-              -p 80:8080 \
+              -p 8080:8080 \
               533267033034.dkr.ecr.ap-northeast-2.amazonaws.com/jobfair:latest

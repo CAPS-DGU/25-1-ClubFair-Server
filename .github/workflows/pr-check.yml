@@ -43,12 +43,11 @@ jobs:
 
   # ========== [2] Deploy Job ==========
   deploy:
-    # Job 2는 Job 1(build)의 결과물을 사용하므로 needs로 종속 처리
     needs: [ build ]
     runs-on: ubuntu-22.04
 
     steps:
-      # (1) AWS 자격 증명 설정 (GitHub Secrets → ECR에 Push할 권한)
+      # (1) AWS 자격 증명 설정 (GitHub Secrets → ECR에 Push 권한)
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -65,13 +64,16 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-files
-          path: ./build/libs/ # 원하는 경로로 다운로드
+          path: ./build/libs/ 
 
-      # (4) Docker Build & Push (ECR)
+      # (4) Docker Build & Push (ECR) - Dockerfile 사용
       - name: Build and Push to ECR
         run: |
+          ls -alh build/libs/
           docker buildx build --platform linux/amd64 --load \
-            -t 533267033034.dkr.ecr.ap-northeast-2.amazonaws.com/jobfair:latest .
+            -t 533267033034.dkr.ecr.ap-northeast-2.amazonaws.com/jobfair:latest \
+            .  # 현재 디렉토리의 Dockerfile 사용 (path: '.')
+
           docker push 533267033034.dkr.ecr.ap-northeast-2.amazonaws.com/jobfair:latest
 
       # (5) SSH로 EC2 접속 → 이미지 Pull & docker run
@@ -82,7 +84,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            # 1) ECR 로그인 (EC2가 IAM Role로 권한을 갖고 있다고 가정)
+            # 1) ECR 로그인
             aws ecr get-login-password --region ap-northeast-2 \
               | docker login --username AWS \
               --password-stdin 533267033034.dkr.ecr.ap-northeast-2.amazonaws.com
@@ -99,3 +101,4 @@ jobs:
               --name jobfair \
               -p 8080:8080 \
               533267033034.dkr.ecr.ap-northeast-2.amazonaws.com/jobfair:latest
+

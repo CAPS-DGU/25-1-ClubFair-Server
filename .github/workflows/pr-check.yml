@@ -12,7 +12,7 @@ jobs:
     steps:
       # (1) 소스 코드 체크아웃 (프라이빗 서브모듈이라면 token 필요)
       - name: Check out repository
-        uses: actions/checkout@lastest
+        uses: actions/checkout@latest
         with:
           token: ${{ secrets.GIT_TOKEN }}
           submodules: true

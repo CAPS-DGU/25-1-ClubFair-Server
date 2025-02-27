@@ -1,11 +1,10 @@
 name: CI_CD
 
 on:
-  pull_request:
+  push:
     branches:
       - main
   workflow_dispatch:
-
 jobs:
   # ========= Build & Push Job =========
   build-and-push:

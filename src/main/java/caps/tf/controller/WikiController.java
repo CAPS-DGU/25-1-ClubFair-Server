@@ -2,13 +2,12 @@ package caps.tf.controller;
 
 import caps.tf.annotation.UserId;
 import caps.tf.dto.wiki.request.CreateWikiRequestDto;
+import caps.tf.dto.wiki.request.PatchWikiRequestDto;
 import caps.tf.service.wiki.WikiService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -26,5 +25,18 @@ public class WikiController {
         return ResponseEntity.created(
                 wikiService.createWiki(userId, createWikiRequestDto)
         ).build();
+    }
+
+    @PatchMapping("/{wikiId}")
+    public ResponseEntity<?> updateWiki(
+            @PathVariable("wikiId") UUID wikiId,
+            @Valid @RequestBody PatchWikiRequestDto patchWikiRequestDto
+    ) {
+        return ResponseEntity.ok(
+                wikiService.patchWiki(
+                        wikiId,
+                        patchWikiRequestDto
+                )
+        );
     }
 }

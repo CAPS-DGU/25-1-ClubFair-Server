@@ -42,7 +42,7 @@ public class User extends BaseTimeEntity {
         this.role = role;
     }
 
-    public static User from(
+    public static User of(
             final String serialId,
             final String password,
             final ERole eRole

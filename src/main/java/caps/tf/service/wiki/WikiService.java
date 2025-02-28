@@ -3,6 +3,7 @@ package caps.tf.service.wiki;
 import caps.tf.domain.user.User;
 import caps.tf.domain.wiki.Wiki;
 import caps.tf.dto.wiki.request.CreateWikiRequestDto;
+import caps.tf.dto.wiki.request.PatchWikiRequestDto;
 import caps.tf.service.user.UserRetriever;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class WikiService {
     private final WikiSaver wikiSaver;
+    private final WikiRetriever wikiRetriever;
     private final UserRetriever userRetriever;
 
     @Transactional
@@ -39,5 +41,21 @@ public class WikiService {
         Wiki savedWiki = wikiSaver.save(targetWiki);
 
         return URI.create("/wiki/" + savedWiki.getId());
+    }
+
+    @Transactional
+    public Void patchWiki(
+            UUID wikiId,
+            PatchWikiRequestDto patchWikiRequestDto
+    ) {
+        Wiki targetWiki = wikiRetriever.getWikiById(wikiId);
+
+        patchWikiRequestDto.name().ifPresent(targetWiki::setName);
+        patchWikiRequestDto.entranceYear().ifPresent(targetWiki::setEntranceYear);
+        patchWikiRequestDto.eDepartment().ifPresent(targetWiki::setEDepartment);
+        patchWikiRequestDto.content().ifPresent(targetWiki::setContent);
+        patchWikiRequestDto.writer().ifPresent(targetWiki::setWriter);
+
+        return null;
     }
 }

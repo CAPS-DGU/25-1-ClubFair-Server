@@ -23,9 +23,6 @@ public class DefaultSuccessHandler implements AuthenticationSuccessHandler {
     @Value("${server.cookie-domain}")
     private String cookieDomain;
 
-    @Value("${server.redirect-url}")
-    private String redirectUrl;
-
     private final JwtUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
 
@@ -44,6 +41,5 @@ public class DefaultSuccessHandler implements AuthenticationSuccessHandler {
         );
 
         AuthenticationResponse.makeLoginSuccessResponse(response, cookieDomain, jwtDto, jwtUtil.getRefreshExpiration());
-        response.sendRedirect("https://" + redirectUrl);
     }
 }

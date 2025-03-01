@@ -4,6 +4,8 @@ import caps.tf.domain.user.User;
 import caps.tf.domain.wiki.Wiki;
 import caps.tf.dto.wiki.request.CreateWikiRequestDto;
 import caps.tf.dto.wiki.request.PatchWikiRequestDto;
+import caps.tf.dto.wiki.response.WikiDetailResponseDto;
+import caps.tf.dto.wiki.response.WikiListResponseDto;
 import caps.tf.service.user.UserRetriever;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URI;
 import java.util.UUID;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -57,5 +60,26 @@ public class WikiService {
         patchWikiRequestDto.writer().ifPresent(targetWiki::setWriter);
 
         return null;
+    }
+
+    @Transactional
+    public WikiListResponseDto getWikiList(
+            int page,
+            String name,
+            String department
+    ) {
+
+        //무한 스크롤 방식 구현
+
+        //return WikiListResponseDto;
+    }
+
+    @Transactional
+    public WikiDetailResponseDto getWikiDetail(
+            UUID wikiId
+    ) {
+        Wiki targetWiki = wikiRetriever.getWikiById(wikiId);
+
+        return WikiDetailResponseDto.of(targetWiki);
     }
 }

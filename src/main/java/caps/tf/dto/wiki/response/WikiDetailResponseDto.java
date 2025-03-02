@@ -1,5 +1,6 @@
 package caps.tf.dto.wiki.response;
 
+import caps.tf.domain.wiki.ECollege;
 import caps.tf.domain.wiki.EDepartment;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import caps.tf.domain.wiki.Wiki;
@@ -13,6 +14,9 @@ public record WikiDetailResponseDto(
         @JsonProperty("entranceYear")
         String entranceYear,
 
+        @JsonProperty("college")
+        ECollege college,
+
         @JsonProperty("department")
         EDepartment eDepartment,
 
@@ -23,6 +27,7 @@ public record WikiDetailResponseDto(
         return WikiDetailResponseDto.builder()
                 .name(wiki.getName())
                 .entranceYear(wiki.getEntranceYear())
+                .college(wiki.getCollege())
                 .eDepartment(wiki.getEDepartment())
                 .content(wiki.getContent())
                 .build();

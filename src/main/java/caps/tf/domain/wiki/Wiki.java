@@ -40,6 +40,10 @@ public class Wiki extends BaseTimeEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    public ECollege getCollege() {
+        return this.eDepartment != null ? this.eDepartment.getECollege() : null;
+    }
+
     @Builder
     public Wiki(
             final String name,

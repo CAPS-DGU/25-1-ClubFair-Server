@@ -1,30 +1,29 @@
 package caps.tf.dto.wiki.response;
 
-import caps.tf.domain.wiki.EDepartment;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import caps.tf.domain.wiki.Wiki;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 
-import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 @Builder
 public record WikiListResponseDto(
-        @JsonProperty("name")
-        String name,
-
-        @JsonProperty("entranceYear")
-        String entranceYear,
-
-        @JsonProperty("department")
-        EDepartment eDepartment
+        @JsonProperty("wikiList") List<WikiInfo> wikiList,
+        @JsonProperty("nextLastWikiId") UUID nextLastWikiId
 ) {
-    public static WikiDetailResponseDto of(
-            Wiki wiki
+    @Builder
+    public record WikiInfo(
+            @JsonProperty("name") String name,
+            @JsonProperty("department") String department,
+            @JsonProperty("college") String college
     ) {
-        return WikiDetailResponseDto.builder()
-                .name(wiki.getName())
-                .entranceYear(wiki.getEntranceYear())
-                .eDepartment(wiki.getEDepartment())
-                .build();
+        public static WikiInfo of(Wiki wiki) {
+            return WikiInfo.builder()
+                    .name(wiki.getName())
+                    .department(wiki.getEDepartment().getName())
+                    .college(wiki.getEDepartment().getECollege().getName())
+                    .build();
+        }
     }
 }

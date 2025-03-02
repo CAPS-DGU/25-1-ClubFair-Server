@@ -39,4 +39,12 @@ public class WikiController {
                 )
         );
     }
+
+    @DeleteMapping("/{wikiId}")
+    public ResponseEntity<?> deleteWiki(
+            @PathVariable("wikiId") UUID wikiId
+    ) {
+        wikiService.deleteWiki(wikiId);
+        return ResponseEntity.noContent().build();
+    }
 }

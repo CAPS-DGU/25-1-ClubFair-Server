@@ -4,6 +4,8 @@ import caps.tf.domain.user.User;
 import caps.tf.domain.wiki.Wiki;
 import caps.tf.dto.wiki.request.CreateWikiRequestDto;
 import caps.tf.dto.wiki.request.PatchWikiRequestDto;
+import caps.tf.exception.CommonException;
+import caps.tf.exception.WikiErrorCode;
 import caps.tf.service.user.UserRetriever;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import java.util.UUID;
 public class WikiService {
     private final WikiSaver wikiSaver;
     private final WikiRetriever wikiRetriever;
+    private final WikiRemover wikiRemover;
     private final UserRetriever userRetriever;
 
     @Transactional
@@ -57,5 +60,13 @@ public class WikiService {
         patchWikiRequestDto.writer().ifPresent(targetWiki::setWriter);
 
         return null;
+    }
+
+    @Transactional
+    public void deleteWiki(UUID wikiId) {
+        if (!wikiRetriever.isWikiExist(wikiId))
+            throw CommonException.type(WikiErrorCode.NOT_FOUND_WIKI);
+
+        wikiRemover.deleteWikiById(wikiId);
     }
 }

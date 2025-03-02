@@ -20,4 +20,8 @@ public class WikiRetriever {
                         CommonException.type(WikiErrorCode.NOT_FOUND_WIKI)
                 );
     }
+
+    public Boolean isWikiExist(UUID id) {
+        return wikiRepository.existsById(id);
+    }
 }

@@ -4,6 +4,8 @@ import caps.tf.domain.user.User;
 import caps.tf.domain.wiki.Wiki;
 import caps.tf.dto.wiki.request.CreateWikiRequestDto;
 import caps.tf.dto.wiki.request.PatchWikiRequestDto;
+import caps.tf.dto.wiki.response.WikiModifiedListResponseDto;
+import caps.tf.dto.wiki.response.WikiModifiedResponseDto;
 import caps.tf.exception.CommonException;
 import caps.tf.exception.WikiErrorCode;
 import caps.tf.service.user.UserRetriever;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -68,5 +71,17 @@ public class WikiService {
             throw CommonException.type(WikiErrorCode.NOT_FOUND_WIKI);
 
         wikiRemover.deleteWikiById(wikiId);
+    }
+
+    public WikiModifiedListResponseDto getWikiModifiedList() {
+        List<Wiki> wikiList = wikiRetriever.getWikiModifiedDescList();
+        List<WikiModifiedResponseDto> wikiModifiedResponseDtoList
+                = wikiList.stream()
+                          .map(WikiModifiedResponseDto::from)
+                          .toList();
+
+        return WikiModifiedListResponseDto.from(
+            wikiModifiedResponseDtoList
+        );
     }
 }

@@ -22,7 +22,7 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 
     @Value("${server.cookie-domain}")
     private String cookieDomain;
-
+  
     public void onLogoutSuccess(
             HttpServletRequest request,
             HttpServletResponse response,

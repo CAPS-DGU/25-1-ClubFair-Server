@@ -7,6 +7,7 @@ import caps.tf.repository.WikiRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -23,5 +24,9 @@ public class WikiRetriever {
 
     public Boolean isWikiExist(UUID id) {
         return wikiRepository.existsById(id);
+    }
+
+    public List<Wiki> getWikiModifiedDescList() {
+        return wikiRepository.findTop7ByOrderByModifiedDateDesc();
     }
 }

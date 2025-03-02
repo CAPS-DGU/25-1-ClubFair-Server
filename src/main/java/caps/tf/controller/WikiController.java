@@ -47,4 +47,9 @@ public class WikiController {
         wikiService.deleteWiki(wikiId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/history")
+    public ResponseEntity<?> getWikiModifiedList() {
+        return ResponseEntity.ok(wikiService.getWikiModifiedList());
+    }
 }

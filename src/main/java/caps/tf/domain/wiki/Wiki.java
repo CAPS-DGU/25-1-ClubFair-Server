@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Setter
@@ -30,19 +31,27 @@ public class Wiki extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private EDepartment eDepartment;
 
+    @Column(name = "college", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ECollege eCollege;
+
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
     @Column(name = "writer", nullable = false)
     private String writer;
 
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "created_at")
+    private LocalDateTime modifiedAt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public ECollege getCollege() {
-        return this.eDepartment != null ? this.eDepartment.getECollege() : null;
-    }
+
 
     @Builder
     public Wiki(

@@ -67,21 +67,29 @@ public class WikiService {
 
     @Transactional
     public WikiListResponseDto getWikiList(
-            UUID lastWikiId,
-            int size,
+            int page,
             String name,
             String department
     ) {
-        EDepartment eDepartment = department != null ? EDepartment.fromDepartment(department) : null;
-        List<Wiki> wikiList = wikiRepository.findWikiList(lastWikiId, size, name, eDepartment);
+        EDepartment eDepartment = (department != null) ? EDepartment.fromDepartment(department) : null;
+        int size = 10;
+        List<Wiki> wikiList = wikiRepository.findWikiList(page, size, name, eDepartment);
+        long totalElements = wikiRepository.countWikiList(name, department);
+        int totalPages = (int) Math.ceil((double) totalElements / size);
 
         List<WikiListResponseDto.WikiInfo> wikiInfoList = wikiList.stream()
                 .map(WikiListResponseDto.WikiInfo::of)
                 .toList();
 
-        UUID nextLastWikiId = wikiList.isEmpty() ? null : wikiList.get(wikiList.size() - 1).getId();
-
-        return new WikiListResponseDto(wikiInfoList, nextLastWikiId);
+        return WikiListResponseDto.builder()
+                .errorCode("SUCCESS")
+                .message("Wiki list retrieved successfully")
+                .result(WikiListResponseDto.WikiListResult.builder()
+                        .totalPage(totalPages)
+                        .totalElement(totalElements)
+                        .wikiList(wikiInfoList)
+                        .build())
+                .build();
     }
 
     @Transactional

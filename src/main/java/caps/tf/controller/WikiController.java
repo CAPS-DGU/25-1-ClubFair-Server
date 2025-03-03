@@ -42,16 +42,13 @@ public class WikiController {
 
     @GetMapping
     public ResponseEntity<?> getWikiList(
-            @RequestParam(value = "wikiId", required = false) UUID lastWikiId,  // No-offset 페이지네이션
-            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "name", required = false) String name,
-            @RequestParam(value = "eDepartment", required = false) String department
-
+            @RequestParam(value = "dept", required = false) String department
     ){
         return ResponseEntity.ok(
                 wikiService.getWikiList(
-                        lastWikiId,
-                        size,
+                        page,
                         name,
                         department
                 )

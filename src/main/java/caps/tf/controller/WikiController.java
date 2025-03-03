@@ -1,6 +1,7 @@
 package caps.tf.controller;
 
 import caps.tf.annotation.UserId;
+import caps.tf.domain.wiki.EDepartment;
 import caps.tf.dto.wiki.request.CreateWikiRequestDto;
 import caps.tf.dto.wiki.request.PatchWikiRequestDto;
 import caps.tf.service.wiki.WikiService;
@@ -44,13 +45,13 @@ public class WikiController {
     public ResponseEntity<?> getWikiList(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "name", required = false) String name,
-            @RequestParam(value = "dept", required = false) String department
+            @RequestParam(value = "dept", required = false) EDepartment EDepartment
     ){
         return ResponseEntity.ok(
                 wikiService.getWikiList(
                         page,
                         name,
-                        department
+                        EDepartment
                 )
         );
     }

@@ -7,9 +7,13 @@ import caps.tf.dto.wiki.request.CreateWikiRequestDto;
 import caps.tf.dto.wiki.request.PatchWikiRequestDto;
 import caps.tf.dto.wiki.response.WikiDetailResponseDto;
 import caps.tf.dto.wiki.response.WikiListResponseDto;
+import caps.tf.exception.CommonException;
 import caps.tf.repository.WikiRepository;
 import caps.tf.service.user.UserRetriever;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,14 +73,18 @@ public class WikiService {
     public WikiListResponseDto getWikiList(
             int page,
             String name,
-            String department
+            EDepartment department
     ) {
-        EDepartment eDepartment = (department != null) ? EDepartment.fromDepartment(department) : null;
-        int size = 10;
-        List<Wiki> wikiList = wikiRepository.findWikiList(page, size, name, eDepartment);
-        long totalElements = wikiRepository.countWikiList(name, department);
-        int totalPages = (int) Math.ceil((double) totalElements / size);
+        if (page < 1)
+            throw CommonException.type(ChocoErrorCode.INVALID_PAGE_CHOCO);
 
+        int size = 10;
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<Wiki> WikiPage
+                = WikiRetriever.findBy(box.getId(), pageable);
+
+        if (page != 1 && page > WikiPage.getTotalPages())
+            throw CommonException.type(ChocoErrorCode.INVALID_PAGE_CHOCO);
         List<WikiListResponseDto.WikiInfo> wikiInfoList = wikiList.stream()
                 .map(WikiListResponseDto.WikiInfo::of)
                 .toList();

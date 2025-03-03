@@ -15,12 +15,12 @@ public interface WikiRepository extends JpaRepository<Wiki, UUID> {
     @Query("SELECT w FROM Wiki w " +
             "WHERE (:name IS NULL OR w.name LIKE %:name%) " +
             "AND (:department IS NULL OR w.eDepartment = :department) " +
-            "ORDER BY w.createdAt DESC")
-    List<Wiki> findWikiList(@Param("page") int page,
+            "ORDER BY w.createdAt DESC " +
+            "OFFSET :offset ROWS FETCH NEXT :size ROWS ONLY")
+    List<Wiki> findWikiList(@Param("offset") int offset,
                             @Param("size") int size,
                             @Param("name") String name,
-                            @Param("department") String department,
-                            Pageable pageable);
+                            @Param("department") EDepartment department);
 
     @Query("SELECT COUNT(w) FROM Wiki w " +
             "WHERE (:name IS NULL OR w.name LIKE %:name%) " +

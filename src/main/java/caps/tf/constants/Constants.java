@@ -14,6 +14,7 @@ public class Constants {
             "/api/health-check",
             "/api/auth/sign-up",
             "/api/auth/sign-in",
-            "/api/wiki/history"
+            "/api/wiki/history",
+            "/api/wiki/random"
     );
 }

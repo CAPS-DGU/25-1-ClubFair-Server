@@ -4,6 +4,7 @@ import caps.tf.domain.user.User;
 import caps.tf.domain.wiki.Wiki;
 import caps.tf.dto.wiki.request.CreateWikiRequestDto;
 import caps.tf.dto.wiki.request.PatchWikiRequestDto;
+import caps.tf.dto.wiki.response.RandomWikiResponseDto;
 import caps.tf.dto.wiki.response.WikiModifiedListResponseDto;
 import caps.tf.dto.wiki.response.WikiModifiedResponseDto;
 import caps.tf.exception.CommonException;
@@ -83,5 +84,11 @@ public class WikiService {
         return WikiModifiedListResponseDto.from(
             wikiModifiedResponseDtoList
         );
+    }
+
+    public RandomWikiResponseDto getRandomWiki() {
+        Wiki randomWiki = wikiRetriever.getRandomWiki();
+
+        return RandomWikiResponseDto.from(randomWiki);
     }
 }

@@ -52,4 +52,11 @@ public class WikiController {
     public ResponseEntity<?> getWikiModifiedList() {
         return ResponseEntity.ok(wikiService.getWikiModifiedList());
     }
+
+    @GetMapping("/random")
+    public ResponseEntity<?> getWikiRandom() {
+        return ResponseEntity.ok(
+                wikiService.getRandomWiki()
+        );
+    }
 }

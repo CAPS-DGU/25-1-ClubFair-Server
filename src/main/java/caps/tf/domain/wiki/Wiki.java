@@ -57,7 +57,6 @@ public class Wiki extends BaseTimeEntity {
     public Wiki(
             final String name,
             final String entranceYear,
-            final ECollege eCollege,
             final EDepartment eDepartment,
             final String content,
             final String writer,
@@ -65,7 +64,6 @@ public class Wiki extends BaseTimeEntity {
     ) {
         this.name = name;
         this.entranceYear = entranceYear;
-        this.eCollege = eCollege;
         this.eDepartment = eDepartment;
         this.content = content;
         this.writer = writer;
@@ -75,7 +73,6 @@ public class Wiki extends BaseTimeEntity {
     public static Wiki of(
             final String name,
             final String entranceYear,
-            final ECollege eCollege,
             final EDepartment eDepartment,
             final String content,
             final String writer,
@@ -84,7 +81,6 @@ public class Wiki extends BaseTimeEntity {
         return Wiki.builder()
                 .name(name)
                 .entranceYear(entranceYear)
-                .eCollege(eCollege)
                 .eDepartment(eDepartment)
                 .content(content)
                 .writer(writer)

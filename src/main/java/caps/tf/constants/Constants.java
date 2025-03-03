@@ -13,6 +13,7 @@ public class Constants {
     public static List<String> NO_NEED_AUTH = List.of(
             "/api/health-check",
             "/api/auth/sign-up",
-            "/api/auth/sign-in"
+            "/api/auth/sign-in",
+            "/api/wiki/**"
     );
 }

@@ -40,6 +40,30 @@ public class WikiController {
         );
     }
 
+    @GetMapping("/public")
+    public ResponseEntity<?> getWikiList(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "name", defaultValue = "", required = false) String name,
+            @RequestParam(value = "dept", required = false) String department
+    ){
+        return ResponseEntity.ok(
+                wikiService.getWikiList(
+                        page,
+                        name,
+                        department
+                )
+        );
+    }
+
+    @GetMapping("/public/{wikiId}")
+    public ResponseEntity<?> getWikiDetail(
+            @PathVariable("wikiId") UUID wikiId
+    ) {
+        return ResponseEntity.ok(
+                wikiService.getWikiDetail(wikiId)
+        );
+    }
+  
     @DeleteMapping("/{wikiId}")
     public ResponseEntity<?> deleteWiki(
             @PathVariable("wikiId") UUID wikiId

@@ -63,7 +63,7 @@ public class WikiController {
                 wikiService.getWikiDetail(wikiId)
         );
     }
-  
+
     @DeleteMapping("/{wikiId}")
     public ResponseEntity<?> deleteWiki(
             @PathVariable("wikiId") UUID wikiId

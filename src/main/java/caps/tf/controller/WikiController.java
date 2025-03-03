@@ -1,7 +1,6 @@
 package caps.tf.controller;
 
 import caps.tf.annotation.UserId;
-import caps.tf.domain.wiki.EDepartment;
 import caps.tf.dto.wiki.request.CreateWikiRequestDto;
 import caps.tf.dto.wiki.request.PatchWikiRequestDto;
 import caps.tf.service.wiki.WikiService;
@@ -41,7 +40,7 @@ public class WikiController {
         );
     }
 
-    @GetMapping
+    @GetMapping("/public")
     public ResponseEntity<?> getWikiList(
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "name", defaultValue = "", required = false) String name,
@@ -56,7 +55,7 @@ public class WikiController {
         );
     }
 
-    @GetMapping("/{wikiId}")
+    @GetMapping("/public/{wikiId}")
     public ResponseEntity<?> getWikiDetail(
             @PathVariable("wikiId") UUID wikiId
     ) {

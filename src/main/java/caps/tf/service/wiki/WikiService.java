@@ -5,9 +5,10 @@ import caps.tf.domain.wiki.EDepartment;
 import caps.tf.domain.wiki.Wiki;
 import caps.tf.dto.wiki.request.CreateWikiRequestDto;
 import caps.tf.dto.wiki.request.PatchWikiRequestDto;
-import caps.tf.dto.wiki.response.WikiDetailResponseDto;
 import caps.tf.dto.wiki.response.WikiListResponseDto;
+import caps.tf.dto.wiki.response.WikiResponseDto;
 import caps.tf.exception.CommonException;
+import caps.tf.exception.WikiErrorCode;
 import caps.tf.repository.WikiRepository;
 import caps.tf.service.user.UserRetriever;
 import lombok.RequiredArgsConstructor;
@@ -73,41 +74,42 @@ public class WikiService {
     public WikiListResponseDto getWikiList(
             int page,
             String name,
-            EDepartment department
+            String department
     ) {
         if (page < 1)
-            throw CommonException.type(ChocoErrorCode.INVALID_PAGE_CHOCO);
+            throw CommonException.type(WikiErrorCode.INVALID_PAGE_WIKI);
 
-        int size = 10;
-        Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Wiki> WikiPage
-                = WikiRetriever.findBy(box.getId(), pageable);
+        Pageable pageable = PageRequest.of(page - 1, 2);
+        Page<Wiki> wikiPage;
+        if (!name.isEmpty())
+            wikiPage = wikiRetriever.getWikiListByName(name, pageable);
+        else if(department != null) {
+            EDepartment eDepartment = EDepartment.fromDepartment(department);
+            wikiPage = wikiRetriever.getWikiListByDepartment(eDepartment.name(), pageable);
+        } else
+            throw CommonException.type(WikiErrorCode.INVALID_QUERY_PARAMETER);
 
-        if (page != 1 && page > WikiPage.getTotalPages())
-            throw CommonException.type(ChocoErrorCode.INVALID_PAGE_CHOCO);
-        List<WikiListResponseDto.WikiInfo> wikiInfoList = wikiList.stream()
-                .map(WikiListResponseDto.WikiInfo::of)
+        if (page != 1 && page > wikiPage.getTotalPages())
+            throw CommonException.type(WikiErrorCode.INVALID_PAGE_WIKI);
+
+        List<WikiResponseDto> wikiResponseDtoList = wikiPage.getContent()
+                .stream()
+                .map(WikiResponseDto::from)
                 .toList();
 
-        return WikiListResponseDto.builder()
-                .errorCode(null)            // 성공 시 null
-                .message("SUCCESS")         // 성공 시 "SUCCESS"
-                .result(
-                        WikiListResponseDto.WikiListResult.builder()
-                                .totalPage(totalPages)
-                                .totalElement(totalElements)
-                                .wikiList(wikiInfoList)
-                                .build()
-                )
-                .build();
+        return WikiListResponseDto.of(
+                wikiPage.getTotalPages(),
+                wikiPage.getTotalElements(),
+                wikiResponseDtoList
+        );
     }
 
     @Transactional
-    public WikiDetailResponseDto getWikiDetail(
+    public WikiResponseDto getWikiDetail(
             UUID wikiId
     ) {
         Wiki targetWiki = wikiRetriever.getWikiById(wikiId);
 
-        return WikiDetailResponseDto.of(targetWiki);
+        return WikiResponseDto.from(targetWiki);
     }
 }

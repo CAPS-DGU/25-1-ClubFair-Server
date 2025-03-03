@@ -43,15 +43,15 @@ public class WikiController {
 
     @GetMapping
     public ResponseEntity<?> getWikiList(
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "name", required = false) String name,
-            @RequestParam(value = "dept", required = false) EDepartment EDepartment
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "name", defaultValue = "", required = false) String name,
+            @RequestParam(value = "dept", required = false) String department
     ){
         return ResponseEntity.ok(
                 wikiService.getWikiList(
                         page,
                         name,
-                        EDepartment
+                        department
                 )
         );
     }

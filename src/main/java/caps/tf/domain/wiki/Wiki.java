@@ -37,17 +37,9 @@ public class Wiki extends BaseTimeEntity {
     @Column(name = "writer", nullable = false)
     private String writer;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "modified_at")
-    private LocalDateTime modifiedAt;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
-
 
     @Builder
     public Wiki(

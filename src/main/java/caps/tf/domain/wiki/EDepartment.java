@@ -123,7 +123,7 @@ public enum EDepartment {
                 .filter(dept -> dept == eDepartment)
                 .map(dept -> dept.eCollege)
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("해당 학과에 대한 소속 대학 정보를 찾을 수 없습니다."));
+                .orElseThrow(() -> CommonException.type(WikiErrorCode.INVALID_DEPARTMENT_NAME));
     }
 
     @JsonCreator

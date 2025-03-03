@@ -82,13 +82,15 @@ public class WikiService {
                 .toList();
 
         return WikiListResponseDto.builder()
-                .errorCode("SUCCESS")
-                .message("Wiki list retrieved successfully")
-                .result(WikiListResponseDto.WikiListResult.builder()
-                        .totalPage(totalPages)
-                        .totalElement(totalElements)
-                        .wikiList(wikiInfoList)
-                        .build())
+                .errorCode(null)            // 성공 시 null
+                .message("SUCCESS")         // 성공 시 "SUCCESS"
+                .result(
+                        WikiListResponseDto.WikiListResult.builder()
+                                .totalPage(totalPages)
+                                .totalElement(totalElements)
+                                .wikiList(wikiInfoList)
+                                .build()
+                )
                 .build();
     }
 

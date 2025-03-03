@@ -10,6 +10,9 @@ import caps.tf.dto.wiki.response.WikiResponseDto;
 import caps.tf.exception.CommonException;
 import caps.tf.exception.WikiErrorCode;
 import caps.tf.repository.WikiRepository;
+import caps.tf.dto.wiki.response.RandomWikiResponseDto;
+import caps.tf.dto.wiki.response.WikiModifiedListResponseDto;
+import caps.tf.dto.wiki.response.WikiModifiedResponseDto;
 import caps.tf.service.user.UserRetriever;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,6 +30,7 @@ import java.util.UUID;
 public class WikiService {
     private final WikiSaver wikiSaver;
     private final WikiRetriever wikiRetriever;
+    private final WikiRemover wikiRemover;
     private final UserRetriever userRetriever;
     private final WikiRepository wikiRepository;
 
@@ -111,5 +115,30 @@ public class WikiService {
         Wiki targetWiki = wikiRetriever.getWikiById(wikiId);
 
         return WikiResponseDto.from(targetWiki);
+    }
+
+    public void deleteWiki(UUID wikiId) {
+        if (!wikiRetriever.isWikiExist(wikiId))
+            throw CommonException.type(WikiErrorCode.NOT_FOUND_WIKI);
+
+        wikiRemover.deleteWikiById(wikiId);
+    }
+
+    public WikiModifiedListResponseDto getWikiModifiedList() {
+        List<Wiki> wikiList = wikiRetriever.getWikiModifiedDescList();
+        List<WikiModifiedResponseDto> wikiModifiedResponseDtoList
+                = wikiList.stream()
+                          .map(WikiModifiedResponseDto::from)
+                          .toList();
+
+        return WikiModifiedListResponseDto.from(
+            wikiModifiedResponseDtoList
+        );
+    }
+
+    public RandomWikiResponseDto getRandomWiki() {
+        Wiki randomWiki = wikiRetriever.getRandomWiki();
+
+        return RandomWikiResponseDto.from(randomWiki);
     }
 }

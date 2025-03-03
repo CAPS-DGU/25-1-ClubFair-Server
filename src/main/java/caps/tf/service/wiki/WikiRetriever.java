@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -29,5 +30,17 @@ public class WikiRetriever {
 
     public Page<Wiki> getWikiListByDepartment(String departmentName, Pageable pageable) {
         return wikiRepository.findAllByEDepartment(departmentName, pageable);
+    }
+
+    public Boolean isWikiExist(UUID id) {
+        return wikiRepository.existsById(id);
+    }
+
+    public List<Wiki> getWikiModifiedDescList() {
+        return wikiRepository.findTop7ByOrderByModifiedDateDesc();
+    }
+
+    public Wiki getRandomWiki() {
+        return wikiRepository.findByRandom();
     }
 }

@@ -64,4 +64,24 @@ public class WikiController {
                 wikiService.getWikiDetail(wikiId)
         );
     }
+  
+    @DeleteMapping("/{wikiId}")
+    public ResponseEntity<?> deleteWiki(
+            @PathVariable("wikiId") UUID wikiId
+    ) {
+        wikiService.deleteWiki(wikiId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/history")
+    public ResponseEntity<?> getWikiModifiedList() {
+        return ResponseEntity.ok(wikiService.getWikiModifiedList());
+    }
+
+    @GetMapping("/random")
+    public ResponseEntity<?> getWikiRandom() {
+        return ResponseEntity.ok(
+                wikiService.getRandomWiki()
+        );
+    }
 }

@@ -31,10 +31,6 @@ public class Wiki extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private EDepartment eDepartment;
 
-    @Column(name = "college", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private ECollege eCollege;
-
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
@@ -44,7 +40,7 @@ public class Wiki extends BaseTimeEntity {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "created_at")
+    @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -57,7 +53,6 @@ public class Wiki extends BaseTimeEntity {
     public Wiki(
             final String name,
             final String entranceYear,
-            final ECollege eCollege,
             final EDepartment eDepartment,
             final String content,
             final String writer,
@@ -65,7 +60,6 @@ public class Wiki extends BaseTimeEntity {
     ) {
         this.name = name;
         this.entranceYear = entranceYear;
-        this.eCollege = eCollege;
         this.eDepartment = eDepartment;
         this.content = content;
         this.writer = writer;
@@ -75,7 +69,6 @@ public class Wiki extends BaseTimeEntity {
     public static Wiki of(
             final String name,
             final String entranceYear,
-            final ECollege eCollege,
             final EDepartment eDepartment,
             final String content,
             final String writer,
@@ -84,11 +77,14 @@ public class Wiki extends BaseTimeEntity {
         return Wiki.builder()
                 .name(name)
                 .entranceYear(entranceYear)
-                .eCollege(eCollege)
                 .eDepartment(eDepartment)
                 .content(content)
                 .writer(writer)
                 .user(user)
                 .build();
+    }
+
+    public ECollege getECollege() {
+        return EDepartment.getECollege(this.eDepartment);
     }
 }

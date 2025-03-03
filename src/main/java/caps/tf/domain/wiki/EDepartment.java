@@ -116,6 +116,16 @@ public enum EDepartment {
         return name;
     }
 
+    public ECollege getECollege() { return eCollege; }
+
+    public static ECollege getECollege(EDepartment eDepartment) {
+        return Arrays.stream(EDepartment.values())
+                .filter(dept -> dept == eDepartment)
+                .map(dept -> dept.eCollege)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("해당 학과에 대한 소속 대학 정보를 찾을 수 없습니다."));
+    }
+
     @JsonCreator
     public static EDepartment fromDepartment(String departmentName) {
         return Arrays.stream(EDepartment.values())

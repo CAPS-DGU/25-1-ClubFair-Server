@@ -29,4 +29,8 @@ public class WikiRetriever {
     public List<Wiki> getWikiModifiedDescList() {
         return wikiRepository.findTop7ByOrderByModifiedDateDesc();
     }
+
+    public Wiki getRandomWiki() {
+        return wikiRepository.findByRandom();
+    }
 }

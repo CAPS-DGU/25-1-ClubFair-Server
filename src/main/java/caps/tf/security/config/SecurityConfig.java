@@ -46,10 +46,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request ->
                         request
                                 .requestMatchers(Constants.NO_NEED_AUTH.toArray(String[]::new)).permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/wiki/**").permitAll()
-                                .requestMatchers(HttpMethod.PATCH, "/wiki/**").authenticated()
-                                .requestMatchers(HttpMethod.DELETE, "/wiki/**").authenticated()
-                                .requestMatchers("/api/**").hasAnyRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/wiki/public/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .formLogin(login -> login

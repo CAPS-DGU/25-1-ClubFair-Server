@@ -41,7 +41,6 @@ public record WikiDetailResponseDto(
         }
     }
 
-    // 최종 Wrapper 생성: "SUCCESS" / errorCode=null
     public static WikiDetailResponseDto of(Wiki wiki) {
         return WikiDetailResponseDto.builder()
                 .errorCode(null)

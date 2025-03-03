@@ -116,6 +116,16 @@ public enum EDepartment {
         return name;
     }
 
+    public ECollege getECollege() { return eCollege; }
+
+    public static ECollege getECollege(EDepartment eDepartment) {
+        return Arrays.stream(EDepartment.values())
+                .filter(dept -> dept == eDepartment)
+                .map(dept -> dept.eCollege)
+                .findFirst()
+                .orElseThrow(() -> CommonException.type(WikiErrorCode.INVALID_DEPARTMENT_NAME));
+    }
+
     @JsonCreator
     public static EDepartment fromDepartment(String departmentName) {
         return Arrays.stream(EDepartment.values())

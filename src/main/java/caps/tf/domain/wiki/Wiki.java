@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Setter
@@ -66,12 +67,16 @@ public class Wiki extends BaseTimeEntity {
             final User user
     ) {
         return Wiki.builder()
-                   .name(name)
-                   .entranceYear(entranceYear)
-                   .eDepartment(eDepartment)
-                   .content(content)
-                   .writer(writer)
-                   .user(user)
-                   .build();
+                .name(name)
+                .entranceYear(entranceYear)
+                .eDepartment(eDepartment)
+                .content(content)
+                .writer(writer)
+                .user(user)
+                .build();
+    }
+
+    public ECollege getECollege() {
+        return EDepartment.getECollege(this.eDepartment);
     }
 }

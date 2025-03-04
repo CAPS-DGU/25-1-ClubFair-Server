@@ -83,7 +83,7 @@ public class WikiService {
         if (page < 1)
             throw CommonException.type(WikiErrorCode.INVALID_PAGE_WIKI);
 
-        Pageable pageable = PageRequest.of(page - 1, 20);
+        Pageable pageable = PageRequest.of(page - 1, 50);
         Page<Wiki> wikiPage;
         if (!name.isEmpty())
             wikiPage = wikiRetriever.getWikiListByName(name, pageable);

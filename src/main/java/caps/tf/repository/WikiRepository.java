@@ -40,4 +40,13 @@ public interface WikiRepository extends JpaRepository<Wiki, UUID> {
             nativeQuery = true
     )
     Page<Wiki> findAllByEDepartment(String department, Pageable pageable);
+
+    @Query(
+            value = "SELECT * " +
+                    "FROM wiki w",
+            countQuery = "SELECT COUNT(*) " +
+                         "FROM wiki w",
+            nativeQuery = true
+    )
+    Page<Wiki> findAllByPagable(Pageable pageable);
 }

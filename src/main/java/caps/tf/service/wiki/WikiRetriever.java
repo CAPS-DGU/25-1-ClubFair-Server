@@ -32,6 +32,10 @@ public class WikiRetriever {
         return wikiRepository.findAllByEDepartment(departmentName, pageable);
     }
 
+    public Page<Wiki> getWikiList(Pageable pageable) {
+        return wikiRepository.findAll(pageable);
+    }
+
     public Boolean isWikiExist(UUID id) {
         return wikiRepository.existsById(id);
     }

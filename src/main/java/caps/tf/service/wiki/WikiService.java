@@ -92,7 +92,6 @@ public class WikiService {
             wikiPage = wikiRetriever.getWikiListByDepartment(eDepartment.name(), pageable);
         } else
             wikiPage = wikiRetriever.getWikiList(pageable);
-//            throw CommonException.type(WikiErrorCode.INVALID_QUERY_PARAMETER);
 
         if (page != 1 && page > wikiPage.getTotalPages())
             throw CommonException.type(WikiErrorCode.INVALID_PAGE_WIKI);
